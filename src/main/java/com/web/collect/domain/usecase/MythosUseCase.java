@@ -1,0 +1,58 @@
+package com.web.collect.domain.usecase;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+@Service
+public class MythosUseCase {
+
+    public List<String> getAllCatalogBonelli(){
+        List<String> allProducts = new ArrayList<>();
+
+        try{
+            String baseUrl = "https://www.lojamythos.com.br/loja/catalogo.php?loja=1119494&categoria=2235&pg=";
+            int currentPage = 1;
+
+            while (true){
+                String url = baseUrl + currentPage;
+                Document doc = Jsoup.connect(url).get();
+
+                Elements productNamesDivs = doc.select("div.product-name");
+
+                for(Element product : productNamesDivs){
+                    String productName = product.text();
+                    allProducts.add(productName);
+                }
+
+                Element nextPageSpan = doc.selectFirst("span.page-next.page-link");
+                if(nextPageSpan == null){
+                    break;
+                }
+
+                currentPage++;
+
+            }
+
+            System.out.println("Todos os produtos");
+            for (String product : allProducts){
+                System.out.println(product);
+            }
+
+
+        }catch (IOException ex){
+            ex.printStackTrace();
+        }
+
+        return allProducts;
+    }
+}
