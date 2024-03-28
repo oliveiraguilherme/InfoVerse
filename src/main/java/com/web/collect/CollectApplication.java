@@ -1,5 +1,7 @@
 package com.web.collect;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.servers.Server;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -13,7 +15,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+@OpenAPIDefinition(servers = { @Server(url = "/", description = "Default Server URL") })
 @SpringBootApplication
 public class CollectApplication {
 
