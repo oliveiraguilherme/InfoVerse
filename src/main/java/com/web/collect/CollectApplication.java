@@ -20,30 +20,30 @@ import java.util.regex.Pattern;
 public class CollectApplication {
 
 	public static void main(String[] args) {
-		try{
-			Document doc = Jsoup.connect("https://www.lojamythos.com.br/hqs-livro?loja=1119494&categoria=73&categories%5B%5D=AS%2BGRANDES%2BAVENTURAS%2BDE%2BTEX").get();
-
-			Elements productNameDivs = doc.select("div.product-name");
-
-			List<String> agatexProducts = new ArrayList<>();
-
-			Pattern pattern = Pattern.compile("AGATEX.*", Pattern.CASE_INSENSITIVE);
-
-			for(Element productNameDiv : productNameDivs){
-				String productName = productNameDiv.text();
-
-				Matcher matcher = pattern.matcher(productName);
-				if(matcher.matches()){
-					agatexProducts.add(productName);
-				}
-			}
-
-			agatexProducts.sort(Comparator.naturalOrder());
-
-			System.out.println("Produtos AGATEX:");
-			for(String product : agatexProducts){
-				System.out.println(product);
-			}
+//		try{
+//			Document doc = Jsoup.connect("https://www.lojamythos.com.br/hqs-livro?loja=1119494&categoria=73&categories%5B%5D=AS%2BGRANDES%2BAVENTURAS%2BDE%2BTEX").get();
+//
+//			Elements productNameDivs = doc.select("div.product-name");
+//
+//			List<String> agatexProducts = new ArrayList<>();
+//
+//			Pattern pattern = Pattern.compile("AGATEX.*", Pattern.CASE_INSENSITIVE);
+//
+//			for(Element productNameDiv : productNameDivs){
+//				String productName = productNameDiv.text();
+//
+//				Matcher matcher = pattern.matcher(productName);
+//				if(matcher.matches()){
+//					agatexProducts.add(productName);
+//				}
+//			}
+//
+//			agatexProducts.sort(Comparator.naturalOrder());
+//
+//			System.out.println("Produtos AGATEX:");
+//			for(String product : agatexProducts){
+//				System.out.println(product);
+//			}
 
 //			Element body = doc.body();
 //
@@ -58,9 +58,9 @@ public class CollectApplication {
 //					}
 //				}
 //			}
-		}catch (IOException ex){
-			ex.printStackTrace();
-		}
+//		}catch (IOException ex){
+//			ex.printStackTrace();
+//		}
 
 
 		SpringApplication.run(CollectApplication.class, args);

@@ -14,7 +14,7 @@ import java.util.List;
 @Tag(name = "Info Controller", description = "RESTful API para administrar times")
 public class Controller {
 
-    private MythosUseCase mythosUseCase;
+    private final MythosUseCase mythosUseCase;
 
     @Autowired
     public Controller(MythosUseCase mythosUseCase){
