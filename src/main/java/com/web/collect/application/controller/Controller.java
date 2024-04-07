@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/v1/info")
+@RequestMapping("/api/v1/info")
 @Tag(name = "Info Controller", description = "RESTful API para administrar times")
 public class Controller {
 
