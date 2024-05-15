@@ -35,18 +35,6 @@ services:
       - spring-demo
     restart: unless-stopped
 
-  jenkins:
-    container_name: jenkins-bsn
-    image: jenkins/jenkins:lts
-    ports:
-      - 8080:8080
-      - 50000:50000
-    volumes:
-      - C:\Users\user\.jdks\temurin-22:/jdk
-    networks:
-      - spring-demo
-    restart: unless-stopped
-
 
 networks:
   spring-demo:
