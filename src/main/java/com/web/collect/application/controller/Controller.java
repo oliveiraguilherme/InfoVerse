@@ -1,5 +1,7 @@
 package com.web.collect.application.controller;
 
+import com.web.collect.domain.enumeration.StrategyTypeEnum;
+import com.web.collect.domain.strategy.GibisStrategyContext;
 import com.web.collect.domain.usecase.MythosUseCase;
 import com.web.collect.domain.usecase.PaniniTurmaMonicaGibisUseCase;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -18,13 +21,16 @@ import java.util.stream.Stream;
 @Tag(name = "Info Controller", description = "RESTful API para administrar times")
 public class Controller {
 
-    private final MythosUseCase mythosUseCase;
-    private final PaniniTurmaMonicaGibisUseCase paniniTurmaMonicaGibisUseCase;
+//    private final MythosUseCase mythosUseCase;
+//    private final PaniniTurmaMonicaGibisUseCase paniniTurmaMonicaGibisUseCase;
+
+    private final GibisStrategyContext gibisStrategyContext;
 
     @Autowired
-    public Controller(MythosUseCase mythosUseCase, PaniniTurmaMonicaGibisUseCase paniniTurmaMonicaGibisUseCase){
-        this.mythosUseCase = mythosUseCase;
-        this.paniniTurmaMonicaGibisUseCase = paniniTurmaMonicaGibisUseCase;
+    public Controller(GibisStrategyContext gibisStrategyContext){
+//        this.mythosUseCase = mythosUseCase;
+//        this.paniniTurmaMonicaGibisUseCase = paniniTurmaMonicaGibisUseCase;
+        this.gibisStrategyContext = gibisStrategyContext;
     }
 
     @GetMapping("/hello")
@@ -36,9 +42,14 @@ public class Controller {
 
     @GetMapping("/getAll")
     public List<String> getAll(){
-        List<String> listaJunta = Stream
-                .concat(mythosUseCase.getAllCatalogBonelli().stream(), paniniTurmaMonicaGibisUseCase.getAllCatalogPaniniTurmaMonicaGibis().stream())
-                .collect(Collectors.toList());
+        List<String> listaJunta = new ArrayList<>();
+        for(StrategyTypeEnum strategyTypeEnum: StrategyTypeEnum.values()){
+            listaJunta.add(gibisStrategyContext.getStrategyByType(strategyTypeEnum).getAllCatalog().toString());
+        }
+        //var listaMythos = gibisStrategyContext.getStrategyByType(StrategyTypeEnum.PANINI).getAllCatalog();
+//        List<String> listaJunta = Stream
+//                .concat(mythosUseCase.getAllCatalogBonelli().stream(), paniniTurmaMonicaGibisUseCase.getAllCatalogPaniniTurmaMonicaGibis().stream())
+//                .collect(Collectors.toList());
         return listaJunta;
     }
 

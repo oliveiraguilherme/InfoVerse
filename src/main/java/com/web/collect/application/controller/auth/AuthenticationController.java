@@ -1,7 +1,6 @@
 package com.web.collect.application.controller.auth;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,7 +18,7 @@ public class AuthenticationController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     public ResponseEntity<?> register(
             @RequestBody @Valid RegisterRequest request
-    ) throws MessagingException {
+    ) {
         authenticationService.register(request);
         return ResponseEntity.accepted().build();
     }

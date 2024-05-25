@@ -1,21 +1,29 @@
 package com.web.collect.domain.usecase.Impl;
 
+import com.web.collect.domain.enumeration.StrategyTypeEnum;
+import com.web.collect.domain.strategy.GibisStratey;
 import com.web.collect.domain.usecase.PaniniTurmaMonicaGibisUseCase;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
-public class PaniniTurmaMonicaGibisUseCaseImpl implements PaniniTurmaMonicaGibisUseCase {
+@Component
+public class PaniniTurmaMonicaGibisUseCaseImpl implements GibisStratey {
 
     @Override
-    public List<String> getAllCatalogPaniniTurmaMonicaGibis(){
+    public StrategyTypeEnum getType() {
+        return StrategyTypeEnum.PANINI;
+    }
+
+    @Override
+    public List<String> getAllCatalog(){
         List<String> allGibis = new ArrayList<>();
 
         try {
@@ -38,6 +46,10 @@ public class PaniniTurmaMonicaGibisUseCaseImpl implements PaniniTurmaMonicaGibis
                     break;
                 }
                 currentPage ++;
+            }
+            System.out.println("Todos os produtos");
+            for (String product : allGibis){
+                System.out.println(product);
             }
         }catch  (IOException ex){
             ex.printStackTrace();

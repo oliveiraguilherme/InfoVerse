@@ -2,7 +2,6 @@ package com.web.collect.application.controller.auth;
 
 import com.web.collect.security.config.JwtService;
 import com.web.collect.security.user.*;
-import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,7 +29,7 @@ public class AuthenticationService {
 //    @Value("${application.mailing.frontend.activation-url}")
 //    private String activationUrl;
 
-    public void register(RegisterRequest request) throws MessagingException {
+    public void register(RegisterRequest request) {
         var userRole = roleRepository.findByName("USER")
                 .orElseThrow(() -> new IllegalStateException("ROLE USER was not initialized"));
 

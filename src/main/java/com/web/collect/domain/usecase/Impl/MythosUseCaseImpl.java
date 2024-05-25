@@ -1,10 +1,13 @@
 package com.web.collect.domain.usecase.Impl;
 
+import com.web.collect.domain.enumeration.StrategyTypeEnum;
+import com.web.collect.domain.strategy.GibisStratey;
 import com.web.collect.domain.usecase.MythosUseCase;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -12,10 +15,15 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-@Service
-public class MythosUseCaseImpl implements MythosUseCase {
+@Component
+public class MythosUseCaseImpl implements GibisStratey {
 
-    public List<String> getAllCatalogBonelli(){
+    @Override
+    public StrategyTypeEnum getType() {
+        return StrategyTypeEnum.MYTHOS;
+    }
+
+    public List<String> getAllCatalog(){
         List<String> allProducts = new ArrayList<>();
 
         try{
