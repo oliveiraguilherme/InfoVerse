@@ -1,6 +1,7 @@
 package com.web.collect.security.config;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -31,6 +32,9 @@ public class ApplicationConfig {
 //    }
     private final UserDetailsService userDetailsService;
 
+    @Value("${cors.set.allowed.origins}")
+    private String UrlAllowed;
+
     @Bean
     public AuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -54,7 +58,7 @@ public class ApplicationConfig {
         final UrlBasedCorsConfigurationSource source  = new UrlBasedCorsConfigurationSource();
         final CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(Collections.singletonList("http://localhost:5000"));
+        config.setAllowedOrigins(Collections.singletonList(UrlAllowed));
         //config.setAllowedOrigins(Collections.singletonList("http://146.190.154.23:5000"));
         config.setAllowedHeaders(Arrays.asList(
                 HttpHeaders.ORIGIN,
