@@ -1,10 +1,10 @@
 spring:
   config:
     activate:
-      on-profile: dev
+      on-profile: prod
   datasource:
-    #url: ${DB_CONTAINER_POSTGRES}
-    url: ${DB_LOCALHOST_POSTGRES}
+    url: ${DB_CONTAINER_POSTGRES}
+    #url: ${DB_LOCALHOST_POSTGRES}
     username: ${DB_USERNAME_POSTGRES}
     password: ${DB_PASSWORD_POSTGRES}
     driver-class-name: org.postgresql.Driver
