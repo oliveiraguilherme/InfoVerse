@@ -11,11 +11,11 @@ import java.util.List;
 public class GibisStrategyContext {
     private final List<GibisStratey> strategies;
 
-    public void executeStrategies() {
-        for (GibisStratey strategy : strategies) {
-            strategy.getAllCatalog();
-        }
-    }
+//    public void executeStrategies() {
+//        for (GibisStratey strategy : strategies) {
+//            strategy.getAllCatalog();
+//        }
+//    }
 
     public GibisStratey getStrategyByType(StrategyTypeEnum strategyTypeEnum){
         return strategies

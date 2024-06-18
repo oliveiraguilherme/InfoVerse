@@ -1,14 +1,13 @@
 package com.web.collect.domain.usecase.Impl;
 
+import com.web.collect.domain.dto.ComicsDTO;
 import com.web.collect.domain.enumeration.StrategyTypeEnum;
 import com.web.collect.domain.strategy.GibisStratey;
-import com.web.collect.domain.usecase.MythosUseCase;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,8 +22,8 @@ public class MythosUseCaseImpl implements GibisStratey {
         return StrategyTypeEnum.MYTHOS;
     }
 
-    public List<String> getAllCatalog(){
-        List<String> allProducts = new ArrayList<>();
+    public List<ComicsDTO> getAllCatalog(int page, int size){
+        List<ComicsDTO> allProducts = new ArrayList<>();
 
         try{
             String baseUrl = "https://www.lojamythos.com.br/loja/catalogo.php?loja=1119494&categoria=2235&pg=";
@@ -34,11 +33,27 @@ public class MythosUseCaseImpl implements GibisStratey {
                 String url = baseUrl + currentPage;
                 Document doc = Jsoup.connect(url).get();
 
-                Elements productNamesDivs = doc.select("div.product-name");
+                Elements itemFlexElements = doc.select("li.item.flex");
 
-                for(Element product : productNamesDivs){
-                    String productName = product.text();
-                    allProducts.add(productName);
+                for(Element itemFlexElement : itemFlexElements  ){
+                    String productName = itemFlexElement.select("div.product-name").text();
+                    System.out.println(productName);
+                    Element imageElement = itemFlexElement.selectFirst("a.space-image img.lazyload");
+                    String img = imageElement != null ? imageElement.attr("data-src") : "";
+                    String description = null;
+                    String author = null;
+                    String artist = null;
+                    String productValue = itemFlexElement.select("div.price-off").text().trim();
+                    //double value = Double.parseDouble(productValue.replace("R$", "").replace(".", "").replace(",", ".").trim());
+                    ComicsDTO comicsDTO = ComicsDTO.builder()
+                            .tittle(productName)
+                            .img(img)
+                            .description(description)
+                            .author(author)
+                            .artist(artist)
+                            .value(productValue)
+                            .build();
+                    allProducts.add(comicsDTO   );
                 }
 
                 Element nextPageSpan = doc.selectFirst("span.page-next.page-link");
@@ -51,7 +66,7 @@ public class MythosUseCaseImpl implements GibisStratey {
             }
 
             System.out.println("Todos os produtos");
-            for (String product : allProducts){
+            for (ComicsDTO product : allProducts){
                 System.out.println(product);
             }
 
@@ -60,8 +75,11 @@ public class MythosUseCaseImpl implements GibisStratey {
             ex.printStackTrace();
         }
 
-        allProducts.sort(Comparator.naturalOrder());
+        allProducts.sort(Comparator.comparing(ComicsDTO::getTittle));
 
-        return allProducts;
+        int fromIndex = Math.min(page * size, allProducts.size());
+        int toIndex = Math.min((page + 1) * size, allProducts.size());
+
+        return  allProducts.subList(fromIndex, toIndex);
     }
 }

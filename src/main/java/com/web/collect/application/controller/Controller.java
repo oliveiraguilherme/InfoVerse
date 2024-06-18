@@ -1,5 +1,6 @@
 package com.web.collect.application.controller;
 
+import com.web.collect.domain.dto.ComicsDTO;
 import com.web.collect.domain.enumeration.StrategyTypeEnum;
 import com.web.collect.domain.strategy.GibisStrategyContext;
 import com.web.collect.domain.usecase.MythosUseCase;
@@ -9,10 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -40,17 +43,28 @@ public class Controller {
                 "quem sabe subir tudo num container e ver rodando num container!!!");
     }
 
-    @GetMapping("/getAll")
-    public List<String> getAll(){
-        List<String> listaJunta = new ArrayList<>();
+    @GetMapping("/getAllOld")
+    public ResponseEntity<List<ComicsDTO>> getAll(@RequestParam int page, @RequestParam int size){
+        List<ComicsDTO> listaJunta = new ArrayList<>();
         for(StrategyTypeEnum strategyTypeEnum: StrategyTypeEnum.values()){
-            listaJunta.add(gibisStrategyContext.getStrategyByType(strategyTypeEnum).getAllCatalog().toString());
+            List<ComicsDTO> comicsList = gibisStrategyContext.getStrategyByType(strategyTypeEnum).getAllCatalog(page, size);
+            if(comicsList != null){
+                listaJunta.addAll(comicsList);
+            }
         }
         //var listaMythos = gibisStrategyContext.getStrategyByType(StrategyTypeEnum.PANINI).getAllCatalog();
 //        List<String> listaJunta = Stream
 //                .concat(mythosUseCase.getAllCatalogBonelli().stream(), paniniTurmaMonicaGibisUseCase.getAllCatalogPaniniTurmaMonicaGibis().stream())
 //                .collect(Collectors.toList());
-        return listaJunta;
+        return ResponseEntity.ok(Optional.of(listaJunta).orElseThrow(() -> new RuntimeException("No comics found in the Mythos catalog")));
+    }
+
+    @GetMapping("/getAll")
+    public ResponseEntity<List<ComicsDTO>> getAllMythos(@RequestParam int page, @RequestParam int size){
+        return ResponseEntity
+                .ok(Optional.ofNullable(gibisStrategyContext.getStrategyByType(StrategyTypeEnum.MYTHOS)
+                        .getAllCatalog(page, size))
+                        .orElseThrow(() -> new RuntimeException("No comics found in the Mythos catalog")));
     }
 
 }
